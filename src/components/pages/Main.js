@@ -15,7 +15,6 @@ class Main extends React.Component {
     componentDidMount(){
         BooksAPI.getAll()
         .then(resp => {
-            console.log(resp)
             this.setState({ books: resp });
         });
     }
