@@ -1,25 +1,28 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import * as BooksAPI from '../../BooksAPI'
+
+import * as BooksAPI from '../../BooksAPI';
 
 import Shelf from '../Shelf'
 
 
 class Main extends React.Component {
-    constructor(props){
+    /*constructor(props){
         super(props);
         this.state = {
             books: []
         }
     }
-    componentDidMount(){
-        BooksAPI.getAll()
-        .then(resp => {
-            this.setState({ books: resp });
-        });
-    }
 
-    updateBook = (book, shelf) => {
+    /*componentDidMount(){
+        BooksAPI.getAll()
+        .then((books) => {
+            this.setState({ books });
+        });
+    }*/
+
+    
+   /* updateBook = (book, shelf) => {
         BooksAPI.update(book, shelf)
         .then(resp => {
           book.shelf = shelf;
@@ -27,9 +30,11 @@ class Main extends React.Component {
               books: state.books.filter(b => b.id !== book.id).concat([book])
           }));
           });
-      }
+      }*/
+    
 
     render() {
+        console.log(this.props.books);
         return (
             <div className="list-books">
             <div className="list-books-title">
@@ -37,9 +42,9 @@ class Main extends React.Component {
             </div>
             <div className="list-books-content">
               <div>
-                <Shelf updateBook={this.updateBook} name="Currently Reading" books={this.state.books.filter(b => b.shelf === "currentlyReading")} />
-                <Shelf updateBook={this.updateBook} name="Want To Read" books={this.state.books.filter(b => b.shelf === "wantToRead")}/>
-                <Shelf updateBook={this.updateBook} name="Read" books={this.state.books.filter(b => b.shelf === "read")}/>
+                <Shelf updateBook={this.props.updateBook} name="Currently Reading" books={this.props.books.filter(b => b.shelf === "currentlyReading")} />
+                <Shelf updateBook={this.updateBook} name="Want To Read" books={this.props.books.filter(b => b.shelf === "wantToRead")}/>
+                <Shelf updateBook={this.updateBook} name="Read" books={this.props.books.filter(b => b.shelf === "read")}/>
               </div>
             </div>
             <div className="open-search">

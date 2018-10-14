@@ -3,11 +3,17 @@ import { Link } from 'react-router-dom';
 
 import * as BooksAPI from '../../BooksAPI';
 
+import Main from './Main';
+
 import Book from '../Book';
 
 
 class SearchPage extends React.Component {
-    constructor(props){
+    state={
+        query: '',
+        results: []
+    }
+    /*constructor(props){
         super(props);
         this.state = {
             books: [],
@@ -15,28 +21,30 @@ class SearchPage extends React.Component {
             query: ""
         }
     }
-    componentDidMount(){
+    /*Figure out how to Link to Main here. Until then, state will not be set*/
+    /*componentDidMount(){
         BooksAPI.getAll()
-        .then(resp => {
-            this.setState({ books: resp });
+        .then((books) => {
+            this.setState({ books });
         });
-    }
-
+    }*/
+    
     updateQuery = (query) => {
         this.setState({query: query}, this.submitSearch);
     }
-
+    
     submitSearch() {
         if(this.state.query === "" || this.state.query === undefined) {
             return this.setState({ results: [] });
         }
+
         BooksAPI.search(this.state.query.trim()).then(res => {
             if(res.error) {
                 return this.setState({ results: [] });
             }
             else {
                 res.forEach(b => {
-                    let f =this.state.books.filter(B => B.id === b.id);
+                    let f =this.state.results.filter(B => B.id === b.id);
                       
                     if (f[0]) {
                         b.shelf = f[0].shelf;
@@ -46,16 +54,18 @@ class SearchPage extends React.Component {
             }
         });
     }
-    updateBook = (book, shelf) => {
-        BooksAPI.update(book, shelf)
-        .then(resp => {
-          book.shelf = shelf;
-          this.setState(state => ({
-              books: state.books.filter(b => b.id !== book.id).concat([book])
-          }));
-          });
-        }
+    
       
+    /*updateBook = (book, shelf) => {
+      BooksAPI.update(book, shelf)
+      .then(resp => {
+        book.shelf = shelf;
+        this.setState(state => ({
+            books: state.books.filter(b => b.id !== book.id).concat([book])
+        }));
+        });
+      }*/
+
     render() {
         return (
             <div className="search-books">
@@ -69,7 +79,7 @@ class SearchPage extends React.Component {
             <div className="search-books-results">
               <ol className="books-grid">
                 {
-                    this.state.results.map((book, key) => <Book updateBook={this.updateBook} book={book} key={key}/>)
+                    this.state.results.map((book, key) => <Book updateBook={this.props.updateBook} book={book} key={key}/>)
                 }
               </ol>
             </div>
