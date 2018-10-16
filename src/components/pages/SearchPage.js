@@ -9,25 +9,20 @@ import Book from '../Book';
 
 
 class SearchPage extends React.Component {
-    state={
+    constructor(props){
+        super(props)
+        this.state={
+        books: [],
         query: '',
         results: []
     }
-    /*constructor(props){
-        super(props);
-        this.state = {
-            books: [],
-            results: [],
-            query: ""
-        }
-    }
-    /*Figure out how to Link to Main here. Until then, state will not be set*/
-    /*componentDidMount(){
+}
+    componentDidMount(){
         BooksAPI.getAll()
-        .then((books) => {
-            this.setState({ books });
-        });
-    }*/
+        .then(resp => {
+            this.setState({ books: resp });
+        })
+    }
     
     updateQuery = (query) => {
         this.setState({query: query}, this.submitSearch);
@@ -44,11 +39,8 @@ class SearchPage extends React.Component {
             }
             else {
                 res.forEach(b => {
-                    let f =this.state.results.filter(B => B.id === b.id);
-                      
-                    if (f[0]) {
-                        b.shelf = f[0].shelf;
-                    }  
+                    let f =this.state.books.filter(B => B.id === b.id)
+                    b.shelf = f[0] ? f[0].shelf : null;
                 });
                 return this.setState({ results: res });
             }
@@ -56,7 +48,7 @@ class SearchPage extends React.Component {
     }
     
       
-    /*updateBook = (book, shelf) => {
+    updateBook = (book, shelf) => {
       BooksAPI.update(book, shelf)
       .then(resp => {
         book.shelf = shelf;
@@ -64,7 +56,7 @@ class SearchPage extends React.Component {
             books: state.books.filter(b => b.id !== book.id).concat([book])
         }));
         });
-      }*/
+    }
 
     render() {
         return (
@@ -78,9 +70,10 @@ class SearchPage extends React.Component {
             </div>
             <div className="search-books-results">
               <ol className="books-grid">
-                {
-                    this.state.results.map((book, key) => <Book updateBook={this.props.updateBook} book={book} key={key}/>)
-                }
+              
+                    { 
+                        this.state.results.map((book, key) => <Book updateBook={this.updateBook} book={book} key={key}/>)
+                    }
               </ol>
             </div>
           </div>
